@@ -10,7 +10,7 @@ rm(list = ls())  # Clear the workspace
 set.seed(12)     # Set the random seed
 
 
-path <- "~/Documents/GitHub/structural models/thirdQuestion"
+path <- "~/Documents/GitHub/structural models/Structural_Models/thirdQuestion"
 
 setwd(path)
 
@@ -175,3 +175,8 @@ theta_hat <- minimum_distance_estimator(F1=F1, F2=F2, beta=beta, ccp_hat=ccp_hat
 
 # Print the estimated parameters
 print(theta_hat)
+
+theta_hat <- minimum_distance_estimator_per_observation(F1=F1, F2=F2, beta=beta, ccp_hat=ccp_hat, x_len=x_len, data_x_index=data_x_index)
+
+print(theta_hat)
+

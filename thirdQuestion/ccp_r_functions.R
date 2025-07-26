@@ -307,7 +307,7 @@ minimum_distance_estimator<- function(F1,F2,beta,ccp_hat,x_len){
   #initial_theta <- c(1, -0.1)  
   # initial guess for theta
   #minimize the weighted squared deviation
-   result <- optim(par = c(1.5, -0.15), 
+   result <- optim(par = c(1.5, -4), 
                   fn = objective, 
                   u2_hat = u2_hat, 
                   x = x, 
@@ -318,6 +318,50 @@ minimum_distance_estimator<- function(F1,F2,beta,ccp_hat,x_len){
   return(theta_hat)
   
 }
+
+objective_per_observation <- function(theta, u2_hat, data_x_index) {
+  # data_x_index: vector of observed states, length = N_obs
+  
+  # Map from observed states to estimated u2_hat for that state
+  u2_hat_obs <- u2_hat[data_x_index]
+  
+  print(head(u2_hat_obs))
+
+  # Compute model utility at the observed x values
+  x_obs <- data_x_index
+  u2_model_obs <- u2_theta(theta, x_obs)
+  
+  diff <- matrix(u2_model_obs - u2_hat_obs, ncol = 1)
+  return(t(diff) %*% diff)
+}
+
+minimum_distance_estimator_per_observation <- function(F1, F2, beta, ccp_hat, x_len, data_x_index) {
+  # Estimate unrestricted utility
+  gamma <- 0.5772
+  
+  Psi1 <- gamma - log(ccp_hat)
+  Psi2 <- gamma - log(1 - ccp_hat)
+  
+  u1 <- rep(0, x_len)
+  I <- diag(x_len)
+  inv_term <- solve(I - beta * F1)
+  
+  u2_hat <- Psi1 - Psi2 - u1 + beta * (F1 - F2) %*% inv_term %*% (Psi1 + u1)
+  u2_hat <- as.vector(u2_hat)  # Ensure it's a vector
+  
+  # Run optimization using identity weighting matrix (i.e. no W needed explicitly)
+  result <- optim(
+    par = c(1.5, -4),
+    fn = objective_per_observation,
+    u2_hat = u2_hat,
+    method = "BFGS",  # Or "CG"
+    data_x_index = data_x_index
+  )
+  
+  theta_hat <- result$par
+  return(theta_hat)
+}
+
 
 
 
