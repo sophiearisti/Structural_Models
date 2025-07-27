@@ -320,20 +320,14 @@ minimum_distance_estimator<- function(F1,F2,beta,ccp_hat,x_len){
 }
 
 objective_per_observation <- function(theta, u2_hat, data_x_index) {
-  # data_x_index: vector of observed states, length = N_obs
-  
-  # Map from observed states to estimated u2_hat for that state
-  u2_hat_obs <- u2_hat[data_x_index]
-  
-  print(head(u2_hat_obs))
-
-  # Compute model utility at the observed x values
-  x_obs <- data_x_index
+  u2_hat_obs <- u2_hat[data_x_index]  # One per observation
+  x_obs <- X[data_x_index]            # Get actual mileage
   u2_model_obs <- u2_theta(theta, x_obs)
   
   diff <- matrix(u2_model_obs - u2_hat_obs, ncol = 1)
   return(t(diff) %*% diff)
 }
+
 
 minimum_distance_estimator_per_observation <- function(F1, F2, beta, ccp_hat, x_len, data_x_index) {
   # Estimate unrestricted utility
