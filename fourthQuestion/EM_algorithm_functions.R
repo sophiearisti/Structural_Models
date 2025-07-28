@@ -86,8 +86,6 @@ plot_mixture_fit <- function(Y, pis, thetas, normal=TRUE, x_range = NULL, bins =
   # x_range: optional x-axis values
   # bins: number of bins for histogram (if continuous)
   
-  print(paste("Plotting mixture fit for", length(thetas), "distributions."))
-  
   if (is.null(x_range)) {
       x_range <- seq(min(Y), max(Y), length.out = 300)
   }

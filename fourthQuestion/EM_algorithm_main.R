@@ -1,6 +1,6 @@
 ##upload the file
 
-global_path <- "/Users/sophiaaristizabal/Documents/GitHub/structural models/fourthQuestion"
+global_path <- "~/Documents/GitHub/structural models/Structural_Models/fourthQuestion"
 
 doc_name <- "/Q4_data.csv"
 #open csv
@@ -15,6 +15,9 @@ hist(as.numeric(data[[1]]), prob = TRUE,
      xlab = "X-Axis Label", 
      ylab = "Probability",
      col = "lightblue")
+
+#for saving the graphs
+setwd("~/Documents/GitHub/structural models/Structural_Models/fourthQuestion")
 
 #EM algorithm is implemented in the file EM_algorithm_functions.R
 
